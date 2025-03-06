@@ -43,6 +43,7 @@ def generate_audio_list(audio_dir: str, output: str) -> None:
 
     with open(output, 'w') as f:
         for audio in audio_list:
+            audio = os.path.basename(audio)
             f.write(audio + '\n')
 
     print(f'Saved {len(audio_list)} audio files to {output}')

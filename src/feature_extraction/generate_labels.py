@@ -311,8 +311,16 @@ class LabelEncoder:
                     end_time = item['end_time']
                     label_file = item['label_file']
                     break
-
-            feature = np.load(feature_file)
+            failure_log_path = "data/checkpoints/feature_reading_failures.log"
+            os.makedirs(os.path.dirname(failure_log_path), exist_ok=True)
+            try:
+                feature = np.load(feature_file)
+            except EOFError as e:
+                with open(failure_log_path, "a") as log_file:
+                    log_file.write(f"Error loading {feature_file}: {e}\n")
+                print(f"Logged: Error loading {feature_file}: {e}")
+                continue
+                
             feature_length = feature.shape[0]
 
             # Validate length of feature array

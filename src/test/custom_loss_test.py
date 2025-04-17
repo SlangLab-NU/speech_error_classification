@@ -82,7 +82,7 @@ class TestCustomFrameLevelLoss(unittest.TestCase):
              [[0.3], [0.7]]], dtype=tf.float32)
 
         loss = self.compute_loss(y_true, y_pred)
-        self.assertAlmostEqual(loss, 1e-7, places=6)
+        self.assertAlmostEqual(loss, 0, places=6)
 
 
 if __name__ == "__main__":

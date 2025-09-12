@@ -15,7 +15,7 @@ conda env create -f environment.yml
 ```
 Or you can also use the requirements.txt as
 ```bash
-pip install -r requirements.txt 
+pip install -r requirements.txt
 ```
 
 

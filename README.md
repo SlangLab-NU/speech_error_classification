@@ -37,7 +37,7 @@ After following the three steps stated below:
 
 - Create a csv directory to store corresponding csv files of each podcast. An example can be found in data_preparation directory
 - Create audio data directory to store the audio files. 
-- Create generated audio features directory to save the generated files (.json files)
+- Create audio features directory to save the generated files (.json files)
 
 To generate audio features for respective podcast load the json file saved in previous Step and provide filepath to save the generated tensor file (.pt files) and run the file as
 ```bash

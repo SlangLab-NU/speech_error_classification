@@ -284,7 +284,7 @@ def get_batch(fabric: L.Fabric, data: list):
     
     for i in ix:
         if i < len(data):
-            print(data)
+            #print(data)
             # Check if the required keys exist
             if "input_ids" not in data[i]:
                 print(f"Warning: 'input_ids' key missing in data[{i}]")

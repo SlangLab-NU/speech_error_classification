@@ -1,199 +1,72 @@
-# Sound Event Detection for Speech Error Detection
+# Faster Whisper - Whispering LLama
 
-To run the code, you need to install the following libraries:
+Setup
+Clone the repo
 
-- python=3.10
-- numpy<2
-- librosa
-- soxr
-- scipy
-- soundfile
-- audioread
-- pandas
-- tensorflow
-- keras
-
-Save the audio files (.wav) in the `data/audio` folder.
-
-The dataset (.csv) should be saved in the `data/metadata` folder. The dataset should have the following columns:
-
-- `file`: the name of the audio file
-- `label`: the label of the speech error
-- `start`: the start time of the speech error
-- `end`: the end time of the speech error
-
-The WhisperX transcript files (.csv) should be saved in the `data/whisperX` folder. The transcript files should have the following columns:
-
-- `start`: the start time of a speech segment
-- `end`: the end time of a speech segment
-- `text`: the text of the speech segment
-
-To load the docker image on the Northeastern Discovery cluster and running the model, refer to the [DOCKER.md](DOCKER.md) file.
-
-## Folder Structure
-
-The code is organized with the following main folders and files:
-
-```
-├── checkpoints/
-├── data/
-│   ├── audio/
-│   ├── features/
-│   ├── labels/
-│   ├── metadata/
-│   ├── visualizations/
-│   ├── whisperX/
-│   └── whisperX_word/
-├── experiments/
-├── logs/
-├── models/
-├── predictions/
-├── scripts/
-│   ├── create_contrive_set.sh
-│   ├── evaluate_utterance.sh
-│   ├── generate_features.sh
-│   ├── generate_labels.sh
-│   ├── process_audio_files.sh
-│   ├── split_data.sh
-│   └── train_model.sh
-├── src/
-│   ├── audio_processing/
-│   │   ├── convert_mp3_to_wav.py
-│   │   ├── generate_audio_list.py
-│   │   └── visualize_audio.py
-│   ├── evaluation/
-│   │   ├── evaluate_utterance.py
-│   │   ├── label_comparison.py
-│   │   ├── model_prediction.py
-│   │   ├── read_tensorboard.py
-│   │   └── transcript_annotation.py
-│   ├── feature_extraction/
-│   │   ├── create_contrive_set.py
-│   │   ├── feature.cfg
-│   │   ├── generate_features.py
-│   │   ├── generate_labels.py
-│   │   └── split_data.py
-│   ├── test/
-│   │   ├── custom_loss_test.py
-│   │   └── validate_labels.py
-│   └── training/
-│       ├── attention.py
-│       ├── custom_data_generator.py
-│       ├── custom_error_rate_metric.py
-│       ├── custom_f1_score.py
-│       ├── custom_frame_level_loss.py
-│       ├── data_utils.py
-│       ├── main.py
-│       ├── model_trainer.py
-│       ├── model_utils.py
-│       └── parse_config.py
-├── DOCKER.md
-├── Dockerfile
-├── environment.yml
-├── LICENSE
-├── README.md
-├── requirements.txt
-└── sbatch_sfused.sh
+```bash
+git clone https://github.com/Srijith-rkr/Whispering-LLaMA
+cd WHISPERing-LLaMA
 ```
 
-## Descriptions
+Install dependencies with Anaconda
 
-### **Folders**
+```bash
+conda env create -f environment.yml
+```
+Or you can also use the requirements.txt as
+```bash
+pip install -r requirements.txt
+```
 
-#### `checkpoints/`
 
-Contains the model checkpoints saved during training (`.keras` files).
+- To obtain the pre-trained Alpaca weights, please refer [here](https://github.com/tatsu-lab/stanford_alpaca#recovering-alpaca-weights). You can then use convert_hf_checkpoint.py on Whispering-LLaMA repository to rename the state_dict the [lit-llama](https://github.com/Lightning-AI/lit-llama) implementation
+- Or you can use the Alpaca weights hosted in HuggingFace [Huggin Face/Whispering-LLaMA](https://huggingface.co/Srijith-rkr/Whispering-LLaMA). Refer to demo.py on Whispering-LLaMA repository how to use them.
+- Obtain pretrained tokenizer model from [hugging face](https://huggingface.co/Srijith-rkr/Whispering-LLaMA/tree/main)
+- Obtain pretrained lit-llama model from [hugging face](https://huggingface.co/Gary3410/pretrain_lit_llama/blob/main)
 
-#### `data/`
 
-- `audio/`: Stores audio files (`.wav`).
-- `features/`: Stores features extracted from the audio files (`.npy`).
-- `labels/`: Stores labels for the audio files (`.npy`).
-- `metadata/`: Stores metadata for the dataset (`.csv`).
-- `visualizations/`: Stores waveforms and spectrograms (`.png`).
-- `whisperX/`: Contains WhisperX transcript files (`.csv`) with start, end, and text columns.
-- `whisperX_word/`: Contains word- and segment-level WhisperX transcripts (`.json`).
 
-#### `experiments/`
+# Dataset preparation
+#### `data_preparation/`
 
-Stores experiment configuration files (`.cfg`).
+To Generate json files for respective podcast run as
+```bash
+python3 generate_json_from_csv.py 
+```
+After following the three steps stated below:
 
-#### `logs/`
+- Create a csv directory to store corresponding csv files of each podcast. An example can be found in data_preparation directory
+- Create audio data directory to store the audio files. 
+- Create audio features directory to save the generated files (.json files)
 
-Stores logs of training processes, including TensorBoard logs (`.csv`, `.json`, `.log`).
+To generate audio features for respective podcast load the json file saved in previous Step and provide filepath to save the generated tensor file (.pt files) and run the file as
+```bash
+python3 generate_audio_features.py
+```
 
-#### `models/`
+# Training and inference
+Upon completion of dataset preparation, move the adapter_copy.py to the training directory within Whispering-LLama directory
 
-Contains trained models (`.keras`).
+- Provide lit-llama petrained path and run as
+  ```bash
+  python3 adapter_copy.py --lr 1e-3 -d 1 --data ac
+  ```
+  You can configure the following flags.
+    ```
+    --lr: learning rate (1e-3 is recommended)
+    --d: Number of GPUs you are using to run the DDP strategy (You can uncomment lines in the code to switch to DeepSpeed)
+    --data: Path to your dataset, example ac_train.pt, ac_test.pt
+    ```
+- In adapter_copy.py tune the parameters: batch size, micro_batch_size, max_seq_length, max_input_length based on the available resource
+- Save the adapter checkpoint
 
-#### `predictions/`
+Finally, run the whispering_LLama inference. 
 
-Stores model predictions on the test set (`.json`).
-
-#### `scripts/`
-
-Shell scripts for data preparation, feature generation, and model training:
-
-- `create_contrive_set.sh`: Creates a contrived dataset with only utterances containing speech errors.
-- `evaluate_utterance.sh`: __Evaluates the model on a specific audio file.__
-- `generate_features.sh`: Extracts features from audio files.
-- `generate_labels.sh`: Generates labels from metadata.
-- `process_audio_files.sh`: Converts audio files from `.mp3` to `.wav`.
-- `split_data.sh`: Splits data into training, validation, and test sets.
-- `train_model.sh`: __Trains the model using specified configurations.__
-
-#### `src/`
-
-Source code organized into subfolders:
-
-##### `audio_processing/`
-
-- `convert_mp3_to_wav.py`: Converts audio files from `.mp3` to `.wav`.
-- `generate_audio_list.py`: Generates a list of all audio files and saves it in the `data/metadata` folder.
-- `visualize_audio.py`: Generates waveforms and spectrograms for audio files and saves them in the `data/visualizations` folder.
-
-##### `evaluation/`
-
-- `evaluate_utterance.py`: Evaluates the model on a specific audio file.
-- `label_comparison.py`: Compares predicted labels with ground truth and calculates evaluation metrics.
-- `model_prediction.py`: Generates predictions for audio files using the trained model.
-- `read_tensorboard.py`: __Reads TensorBoard logs for analysis.__
-- `transcript_annotation.py`: Annotates WhisperX transcript files with predicted speech errors.
-
-##### `feature_extraction/`
-
-- `create_contrive_set.py`: Creates a contrived dataset with only utterances containing speech errors.
-- `feature.cfg`: Configuration file for feature extraction.
-- `generate_features.py`: Extracts features from audio files and saves them in `data/features`.
-- `generate_labels.py`: Generates labels from metadata and saves them in `data/labels`.
-- `split_data.py`: Splits data into training, validation, and test sets.
-
-##### `test/`
-
-- `custom_loss_test.py`: Tests custom loss functions for the model.
-- `validate_labels.py`: Validates the correctness of generated labels.
-
-##### `training/`
-
-- `attention.py`: Defines a custom Keras layer for attention mechanisms.
-- `custom_data_generator.py`: Implements a custom data generator for model training.
-- `custom_error_rate_metric.py`: Defines a custom error rate metric (not currently used).
-- `custom_f1_score.py`: Implements a custom F1 score metric.
-- `custom_frame_level_loss.py`: Implements a custom loss function for frame-level predictions.
-- `data_utils.py`: Utility functions for loading and processing data from `.csv` and `.npy` files.
-- `main.py`: __Main script for training the model.__
-- `model_trainer.py`: Implements a class for training the model with k-fold cross-validation.
-- `model_utils.py`: Utility functions for building and training the Keras model.
-- `parse_config.py`: Utility functions for parsing experiment configuration files.
-
----
-
-### **Files**
-
-- **DOCKER.md**: Instructions to load the Docker image and run the model on the Northeastern Discovery cluster.
-- **Dockerfile**: Dockerfile for building the Docker image.
-- **environment.yml**: Conda environment configuration file.
-- **LICENSE**: MIT License for the project.
-- **README.md**: Project documentation (this file).
-- **requirements.txt**: List of required Python libraries.
-- **sbatch_sfused.sh**: Script to run the model on the Northeastern Discovery cluster using GPU nodes.
+```bash
+python3 llama_whisper_adapter_inference.py \
+    --pretrained_path 'model/alpaca_a.pth model/alpaca_b.pth model/alpaca_c.pth' \
+    --tokenizer_path 'model/tokenizer.model' \
+    --data 'audio_features/ac048_2007-08-06_train.pt' \
+    --save_dir 'inference_result' \
+    --root 'model/adapter_checkpoints'
+ ```  

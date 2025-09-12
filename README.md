@@ -39,11 +39,10 @@ After following the three steps stated below:
 - Create audio data directory to store the audio files. 
 - Create generated audio features directory to save the generated files (.json files)
 
-To generate audio features for respective podcast run as
+To generate audio features for respective podcast load the json file saved in previous Step and provide filepath to save the generated tensor file (.pt files) and run the file as
 ```bash
 python3 generate_audio_features.py
 ```
-Prior to ruuning the code load the json file saved in Step 1 and provide filepath to save the generated tensor file (.pt files)
 
 # Training and inference
 Upon completion of step 1 and step 2, move the adapter_copy.py to the training directory within Whispering-LLama directory

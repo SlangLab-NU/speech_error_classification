@@ -66,7 +66,7 @@ Finally, run the whispering_LLama inference.
 python3 llama_whisper_adapter_inference.py \
     --pretrained_path 'model/alpaca_a.pth model/alpaca_b.pth model/alpaca_c.pth' \
     --tokenizer_path 'model/tokenizer.model' \
-    --data '/home/user/Documents/NEU_SFU/speech_error_classification/Whispering-LLaMA/audio_features/gs_inferences/ac048_2007-08-06_train.pt' \
-    --save_dir '/home/user/Documents/NEU_SFU/speech_error_classification/Whispering-LLaMA/inference_result' \
-    --root '/home/user/Documents/NEU_SFU/speech_error_classification/Whispering-LLaMA/model/adapter_checkpoints'
+    --data 'audio_features/ac048_2007-08-06_train.pt' \
+    --save_dir 'inference_result' \
+    --root 'model/adapter_checkpoints'
  ```  

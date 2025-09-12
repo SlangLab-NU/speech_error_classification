@@ -59,8 +59,8 @@ Upon completion of dataset preparation, move the adapter_copy.py to the training
     ```
 - In adapter_copy.py change batch size, model size, token length based on the resource
 - Save the adapter checkpoint
-    
-2) Finally, run the whispering_LLama inference. 
+
+Finally, run the whispering_LLama inference. 
 
 ```bash
 python3 llama_whisper_adapter_inference.py \

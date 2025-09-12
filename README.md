@@ -19,8 +19,8 @@ pip install -r requirements.txt
 ```
 
 
-- To obtain the pre-trained Alpaca weights, please refer [here](https://github.com/tatsu-lab/stanford_alpaca#recovering-alpaca-weights). You can then use convert_hf_checkpoint.py to rename the state_dict the [lit-llama](https://github.com/Lightning-AI/lit-llama) implementation
-- Or you can use the Alpaca weights hosted in HuggingFace [Huggin Face/Whispering-LLaMA](https://huggingface.co/Srijith-rkr/Whispering-LLaMA). Refer to demo.py on how to use them.
+- To obtain the pre-trained Alpaca weights, please refer [here](https://github.com/tatsu-lab/stanford_alpaca#recovering-alpaca-weights). You can then use convert_hf_checkpoint.py on Whispering-LLaMA repository to rename the state_dict the [lit-llama](https://github.com/Lightning-AI/lit-llama) implementation
+- Or you can use the Alpaca weights hosted in HuggingFace [Huggin Face/Whispering-LLaMA](https://huggingface.co/Srijith-rkr/Whispering-LLaMA). Refer to demo.py on Whispering-LLaMA repository how to use them.
 -Obtain pretrained tokenizer model from [hugging face](https://huggingface.co/Srijith-rkr/Whispering-LLaMA/tree/main)
 -Obtain pretrained lit-llama model from [hugging face](https://huggingface.co/Gary3410/pretrain_lit_llama/blob/main)
 

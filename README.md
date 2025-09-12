@@ -47,9 +47,17 @@ python3 generate_audio_features.py
 # Training and inference
 Upon completion of dataset preparation, move the adapter_copy.py to the training directory within Whispering-LLama directory
 
-- Provide lit-llama petrained path and run the adapter_copy.py --lr 0.001 -d 1 --data ac (specify learning rate, number of gpu and data)
-- Change batch size, model size, token length based on the resource
-- Need train and test files, example ac_train.pt, ac_test.pt
+- Provide lit-llama petrained path and run the
+  ```bash
+  adapter_copy.py --lr 1e-3 -d 1 --data ac
+  ```
+  You can configure the following flags.
+    ```
+    --lr: learning rate (1e-3 is recommended)
+    --d: Number of GPUs you are using to run the DDP strategy (You can uncomment lines in the code to switch to DeepSpeed)
+    --data: Path to your dataset, example ac_train.pt, ac_test.pt
+    ```
+- In adapter_copy.py change batch size, model size, token length based on the resource
 - Save the adapter checkpoint
     
 2) Finally, run the whispering_LLama inference. 

@@ -34,9 +34,10 @@ To Generate json files for respective podcast run as
 python3 generate_json_from_csv.py 
 ```
 After following the three steps stated below:
-    -Create a csv directory to store corresponding csv files of each podcast. An example can be found in data_preparation directory
-    -Create audio data directory to store the audio files. 
-    -Create generated audio features directory to save the generated files (.json files)
+
+- Create a csv directory to store corresponding csv files of each podcast. An example can be found in data_preparation directory
+- Create audio data directory to store the audio files. 
+- Create generated audio features directory to save the generated files (.json files)
 
 To generate audio features for respective podcast run as
 ```bash

@@ -57,7 +57,7 @@ Upon completion of dataset preparation, move the adapter_copy.py to the training
     --d: Number of GPUs you are using to run the DDP strategy (You can uncomment lines in the code to switch to DeepSpeed)
     --data: Path to your dataset, example ac_train.pt, ac_test.pt
     ```
-- In adapter_copy.py change batch size, model size, token length based on the resource
+- In adapter_copy.py tune the parameters: batch size, micro_batch_size, max_seq_length, max_input_length based on the available resource
 - Save the adapter checkpoint
 
 Finally, run the whispering_LLama inference. 

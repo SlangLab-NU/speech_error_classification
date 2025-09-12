@@ -45,11 +45,12 @@ python3 generate_audio_features.py
 ```
 
 # Training and inference
-Upon completion of step 1 and step 2, move the adapter_copy.py to the training directory within Whispering-LLama directory
-    - Provide lit-llama petrained path and run the adapter_copy.py --lr 0.001 -d 1 --data ac (specify learning rate, number of gpu and data)
-    - Change batch size, model size, token length based on the resource
-    - Need train and test files, example ac_train.pt, ac_test.pt
-    - Save the adapter checkpoint
+Upon completion of dataset preparation, move the adapter_copy.py to the training directory within Whispering-LLama directory
+
+- Provide lit-llama petrained path and run the adapter_copy.py --lr 0.001 -d 1 --data ac (specify learning rate, number of gpu and data)
+- Change batch size, model size, token length based on the resource
+- Need train and test files, example ac_train.pt, ac_test.pt
+- Save the adapter checkpoint
     
 2) Finally, run the whispering_LLama inference. 
 
